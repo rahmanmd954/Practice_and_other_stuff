@@ -29,6 +29,9 @@ public class SnakeGame extends JPanel implements ActionListener {
     }
 
     private void startGame() {
+        if (timer != null) {
+            timer.stop();  // Stop any existing timer before starting a new one
+        }
         snake.clear();
         snake.add(new Point(5, 5));
         direction = 'R';
@@ -38,6 +41,7 @@ public class SnakeGame extends JPanel implements ActionListener {
         timer = new Timer(DELAY, this);
         timer.start();
     }
+
 
     private void spawnFood() {
         Random rand = new Random();
