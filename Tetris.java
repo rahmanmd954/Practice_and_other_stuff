@@ -10,6 +10,7 @@ public class Tetris extends JPanel implements ActionListener {
     private boolean isStarted = false;
     private boolean isPaused = false;
     private int numLinesRemoved = 0;
+    private int score = 0;
     private int curX = 0;
     private int curY = 0;
     private Shape curPiece;
@@ -45,6 +46,7 @@ public class Tetris extends JPanel implements ActionListener {
         isStarted = true;
         isFallingFinished = false;
         numLinesRemoved = 0;
+        score = 0;
         clearBoard();
         newPiece();
         timer.start();
@@ -93,6 +95,9 @@ public class Tetris extends JPanel implements ActionListener {
                 drawSquare(g, 0 + x * squareWidth(), boardTop + (BOARD_HEIGHT - y - 1) * squareHeight(), curPiece.getShape());
             }
         }
+
+        g.setColor(Color.WHITE);
+        g.drawString("Score: " + score, 10, 20);
     }
 
     private void dropDown() {
@@ -135,6 +140,7 @@ public class Tetris extends JPanel implements ActionListener {
             curPiece.setShape(Shape.Tetrominoes.NoShape);
             timer.stop();
             isStarted = false;
+            gameOver();
         }
     }
 
@@ -178,9 +184,20 @@ public class Tetris extends JPanel implements ActionListener {
 
         if (numFullLines > 0) {
             numLinesRemoved += numFullLines;
+            score += numFullLines * 100;
             isFallingFinished = true;
             curPiece.setShape(Shape.Tetrominoes.NoShape);
             repaint();
+        }
+    }
+
+    private void gameOver() {
+        JOptionPane.showMessageDialog(this, "Game Over. Your score: " + score, "Game Over", JOptionPane.INFORMATION_MESSAGE);
+        int response = JOptionPane.showConfirmDialog(this, "Do you want to restart the game?", "Restart Game", JOptionPane.YES_NO_OPTION);
+        if (response == JOptionPane.YES_OPTION) {
+            start();
+        } else {
+            System.exit(0);
         }
     }
 
